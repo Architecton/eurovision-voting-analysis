@@ -1,12 +1,16 @@
+import csv
 
 # Read and process data to be used for clustering.
 # param file_name: name of the file containing the data
 # return: dictionary with element names as keys and feature vectors as values
 def read_file(file_name):
-	# TODO	
-	pass
+	# Open data file
+	with open("eurovision-final.csv", "rt", encoding="latin1") as f:
+		# Read lines from csv file
+		data_lines = list(csv.reader(f))
 
 
+# HierarchicalClustering: class implementing hierarchical clustering functionalities
 class HierarchicalClustering:
 
 	# constructor: assign parsed data and create initial clusters where each row is its own data.
@@ -63,6 +67,8 @@ class HierarchicalClustering:
 		except KeyError("Specified row not found."):
 			pass
 
+		# Select distance measuring function to use depending on the value of
+		# distance_meas variable.
 		distance_func = None
 		if distance_meas == "euclidean":
 			dist_func = euclidean_dist
