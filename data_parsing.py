@@ -51,7 +51,46 @@ def read_file(file_name):
 		# Return dictionary representing the processed data
 		return processed_data
 
+def get_labels(file_name):
+	with open(file_name, "rt", encoding="latin1") as f:
+		# Read lines from csv file into numpy array
+		raw_data = np.array(list(csv.reader(f)))
+
+		# Get names of countries (as names of rows 17-63)
+		country_names = raw_data[0, 16:63]
+
+		# Trim whitespace from start and end.
+		country_names = list(map(lambda x: x.strip(), country_names))
+
+		# Handle country name conflict between name in rows and name in columns
+		country_names[country_names.index("Serbia & Montenegro")] = "Serbia and Montenegro"
+
+		# define list that will store regions of countries in country_names list with same index.
+		country_regions = []
+
+		# All rows of columns with countries and regions (performances)
+		countries = list(raw_data[1:, 1])
+		regions = raw_data[1:, 2]
+
+		# Make a set of countries that do not appear
+		with_unlisted_regions = {"Andorra", "Czech Republic", "Monaco", "Montenegro", "San Marino"} 
+
+		# Get regions for each country.
+		for country in country_names:
+			if country in with_unlisted_regions:
+				country_regions.append("not listed")
+			else:
+				index_country = countries.index(country) # Get index of country and use it to get region.
+				region = regions[index_country]
+				country_regions.append(region)
+
+		# Return matrix where the first row contains the country names and the second row their regions
+		return np.stack((country_names, country_regions))
+
+
 data = read_file(file_name)
+
+r = get_labels(file_name)
 
 # Notes to self:
 """

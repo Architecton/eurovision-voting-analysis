@@ -4,11 +4,15 @@ import csv
 # param file_name: name of the file containing the data
 # return: dictionary with element names as keys and feature vectors as values
 def read_file(file_name):
-	# Open data file
-	with open("eurovision-final.csv", "rt", encoding="latin1") as f:
-		# Read lines from csv file
-		data_lines = list(csv.reader(f))
+	pass
+	# See data_parsing.py
 
+# get_labels: get a 2 by 47 matrix where the first row contains the country names and the second row their regions
+# obtained from the third column in the original data sheet.
+# This matrix is used as a label for the data matrix obtained by the read_file function (the indices match).
+def get_labels(file_name):
+	pass
+	# See data_parsing.py
 
 # HierarchicalClustering: class implementing hierarchical clustering functionalities
 class HierarchicalClustering:
