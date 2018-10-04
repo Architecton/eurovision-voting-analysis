@@ -1,5 +1,7 @@
 import csv
 import numpy as np
+import group_distance
+import sample_distance
 
 file_name = "eurovision-final.csv"
 
@@ -34,7 +36,7 @@ def read_file(file_name):
 
 		# Create rows in processed data matrix.
 		for country in country_names:
-			bins = np.zeros([1, NUM_COUNTRIES], dtype = int) 		# Create bins.
+			bins = np.zeros((NUM_COUNTRIES, ), dtype = int) 		# Create bins.
 			index_row = col_names.index(country) 					# Get index of column representing votes from this country.
 
 			# Go over performing countries across all years.
@@ -43,7 +45,7 @@ def read_file(file_name):
 				val = raw_data[i, index_row] 								# Get number of points awarded by country A (If data exists).
 				try:
 					points = int(val) 								# Try to convert value to an integer.
-					bins[0, bin_index] += points 					# If successfully converted, add to bin.
+					bins[bin_index] += points 						# If successfully converted, add to bin.
 				except ValueError:
 					pass
 			processed_data[country] = bins 							# Add country data to dictionary representing the processed data.
