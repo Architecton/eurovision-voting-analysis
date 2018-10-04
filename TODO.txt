@@ -1,2 +1,2 @@
 - Add authorship note to every file
-- Add files in own folders
+- Add modules in package(s)
