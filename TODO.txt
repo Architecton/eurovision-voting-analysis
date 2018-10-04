@@ -1,0 +1,2 @@
+- Add authorship note to every file
+- Add files in own folders

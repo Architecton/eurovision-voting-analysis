@@ -4,6 +4,27 @@ import itertools
 import group_distance
 import sample_distance
 
+# Parsing the data file - notes:
+"""
+	Rows are countries (columns in original file (Q - BK / 17 - 63/) - 47 columns)
+	in list comprehension: l[0][16:63] # select names of countries -> keys
+
+	Note that country names are sometimes ended with a space -> trim.
+
+	For each country A:
+		- Make bins corresponding to each other country i.
+		- In each bin, sum votes from country A for this country i.
+
+	Summing votes for each country i from country A:
+		- There are 47 countries voting.
+		- Make a tuple of names of countries (column names 17 - 63).
+		- Indices of names of countries are also indices in the bins list.
+		- Go over all rows representing votes.
+		- Get name (and from name, the index) from row name.
+		- Add value in row to appropriate bin.
+		- Add entry to data dict.
+"""
+
 # Read and process data to be used for clustering.
 # param file_name: name of the file containing the data
 # return: dictionary with element names as keys and feature vectors as values
@@ -108,9 +129,6 @@ class HierarchicalClustering:
 		# Compute and return similarity between the rows using the specified distance.
 		return distance_func(r1_data, r2_data)
 
-
-	# TODO - 4.10.2018 #####
-
 	# cluster_distance: compute distance between two clusters. Each cluster is specified as a list of lists where each list is itself a cluster.
 	# Example call: self.cluster_distance([[["Albert"], ["Branka"]], ["Cene"]], [["Nika"], ["Polona"]])
 	def cluster_distance(self, c1, c2):
@@ -148,7 +166,6 @@ class HierarchicalClustering:
 
 		return closest_clusters, min_dist
 
-	#########################
 
 	# TODO - 5.10.2018-7.10.2018 ###
 
