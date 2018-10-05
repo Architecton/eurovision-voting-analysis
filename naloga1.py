@@ -1,12 +1,11 @@
 import csv
 import numpy as np
 import math
-import copy
 import itertools
-import group_distance
-import sample_distance
-import dendrogram_plotter
-import inject
+from lib_naloga1 import group_distance
+from lib_naloga1 import sample_distance
+from lib_naloga1 import dendrogram_plotter
+from lib_naloga1 import inject
 
 # Parsing the data file - notes:
 """
@@ -99,10 +98,17 @@ class HierarchicalClustering:
 	def __init__(self, data):
 		# Initialize clustering
 		self.data = data
+
 		# self.clusters stores current clustering.
 		self.clusters = [[name] for name in self.data.keys()]
-		self.num_clusters = len(self.clusters)
+
+		# distances: A list that maps each cluster to the distance between its two nested clusters
+		# This list is used to inject distances into list representing the dendrogram to allow
+		# the plotting of a proportional dendrogram.
 		self.distances = np.empty((len(self.clusters) - 1,), dtype = list)
+
+		# first_plot: True if the tree has not yet been plotted. This prevents the distance injection functionality
+		# to run more than once.
 		self.first_plot = True
 
 	# row_distance: compute distance between data in two rows.
@@ -189,12 +195,11 @@ class HierarchicalClustering:
 	def run(self):
 		dist_index = 0
 		# While there is more than one group...
-		while(self.num_clusters > 1):
+		while(len(self.clusters) > 1):
 			closest_clusters, dist = self.closest_clusters() 			# Find closest clusters and their distance.
 			# print("Closest clusters with distance {0}.".format(dist)) 	
 			self.cluster_union(closest_clusters, dist, dist_index)		# Replace clusters with their union.
 			dist_index += 1 											
-			self.num_clusters -= 1 										# There is now one less cluster.
 		self.clusters = self.clusters[0]								# Unnest the final cluster (for plotting)
 		
 
