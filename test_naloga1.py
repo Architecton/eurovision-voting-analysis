@@ -102,8 +102,9 @@ class HierarchicalClusteringTest(unittest.TestCase):
             self.data[a], self.data[b])
         hc.run()
 
+        
         self.assertTrue(compare_trees(hc.clusters, CLUSTER_AVG_MAX) or
-                        compare_trees(hc.clusters, CLUSTER_MIN))
+                            compare_trees(hc.clusters, CLUSTER_MIN))
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ def plot_dendrogram_ascii(D):
     
     # is_node: check if List represents a node (contains nested lists).
     def is_node(D):
-        return isinstance(D, tuple) and len(D) == 3
+        return isinstance(D, list) and len(D) == 3
     
     # max_height: return the highest subtree.
     # If subtree is a leaf, return length of string representing a leaf in tree.
@@ -59,5 +59,8 @@ def plot_dendrogram_ascii(D):
     traverse(D, max_height(D), -1, 5)
 
 ## Simple test ##
-D2 = (50, (15, (13, (2, ('Austria') , ('Slovenia')) , ('Israel')), ('Serbia') ), (25, (9, ('France') , ('Germany')), (8, ('Belgium'), ('Sweden') ) ) )
-plot_dendrogram_ascii(D2)
+# D2 = (50, (15, (13, (2, ('Austria') , ('Slovenia')) , ('Israel')), ('Serbia') ), (25, (9, ('France') , ('Germany')), (8, ('Belgium'), ('Sweden') ) ) )
+# plot_dendrogram_ascii(D2)
+
+
+# D3 = [100, [74, ['Cene'], ['Dea']], [125, ['Albert'], [89, ['Branka'], ['Edo']]]]

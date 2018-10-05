@@ -1,8 +1,12 @@
 import csv
 import numpy as np
+import math
+import copy
 import itertools
 import group_distance
 import sample_distance
+import dendrogram_plotter
+import inject
 
 # Parsing the data file - notes:
 """
@@ -97,7 +101,9 @@ class HierarchicalClustering:
 		self.data = data
 		# self.clusters stores current clustering.
 		self.clusters = [[name] for name in self.data.keys()]
-
+		self.num_clusters = len(self.clusters)
+		self.distances = np.empty((len(self.clusters) - 1,), dtype = list)
+		self.first_plot = True
 
 	# row_distance: compute distance between data in two rows.
 	# Example call: self.row_distance("Polona", "Rajko")
@@ -166,24 +172,41 @@ class HierarchicalClustering:
 
 		return closest_clusters, min_dist
 
+	# cluster_union: replace closest clusters in list of clusters with their union. Also append data to the
+	# distances list that will be used to inject distances into dendrogram list representation (used for plotting)
+	def cluster_union(self, closest_clusters, dist, dist_index):
+		cluster1, cluster2 = closest_clusters 			# Get closest clusters.
+		self.clusters.remove(cluster1) 					# Remove clusters that will be joined from the list of clusters.
+		self.clusters.remove(cluster2)
+		new_cluster = [cluster1, cluster2] 				# Create a new cluster representing the union of the removed clusters.
+		self.clusters.append(new_cluster) 				# Add union to list of clusters.
+		self.distances[dist_index] = [new_cluster, math.ceil(dist) - 27] # Add entry into distances list.
 
-	# TODO - 5.10.2018-7.10.2018 ###
 
 	# Given the data in self.data, performs hierarchical clustering. Can use a while loop, iteratively modify self.clusters and store
 	# information on which clusters were merged and what was the distance. Store this later information into a suitable structure to be used
 	# for plotting of the hierarchical clustering.
 	def run(self):
-		# TODO
-		pass
+		dist_index = 0
+		# While there is more than one group...
+		while(self.num_clusters > 1):
+			closest_clusters, dist = self.closest_clusters() 			# Find closest clusters and their distance.
+			# print("Closest clusters with distance {0}.".format(dist)) 	
+			self.cluster_union(closest_clusters, dist, dist_index)		# Replace clusters with their union.
+			dist_index += 1 											
+			self.num_clusters -= 1 										# There is now one less cluster.
+		self.clusters = self.clusters[0]								# Unnest the final cluster (for plotting)
+		
 
 	# Use cluster information to plot an ASCII representation of the cluster tree.
 	def plot_tree(self):
-		# TODO
-		pass
+		if self.first_plot == True: 									# If first plot, inject distances into list representing the tree.
+			inject.inject_distances(self.clusters, self.distances) 		# !!! NOTE: This changes the clusters list. !!!
+			self.first_plot = False
+		dendrogram_plotter.plot_dendrogram_ascii(self.clusters) 		# Plot dendrogram.
 
 	#################################
 
-"""
 # If running this file as a script
 if __name__ == "__main__":
 
@@ -198,15 +221,3 @@ if __name__ == "__main__":
 
 	# Plot results of clustering.
 	hc.plot_tree()
-"""
-
-if __name__ == "__main__":
-	file_name = "eurovision-final.csv"
-	data = read_file(file_name)
-	labels = get_labels(file_name)
-	hc = HierarchicalClustering(read_file(file_name))
-	row_dist_ex = hc.row_distance("Slovenia", "Norway")
-	cluster1 = ["Slovenia", "Austria", "Norway"]
-	cluster2 = ["Serbia", "Croatia", "France"]
-	cluster_dist_ex = hc.cluster_distance(cluster1, cluster2)
-	closest = hc.closest_clusters()
