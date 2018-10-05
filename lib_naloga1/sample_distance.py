@@ -1,5 +1,9 @@
 import math
 
+########################
+# Author: Jernej Vivod #
+########################
+
 # euclidean_dist: compute similarity between samples sample_1 and sample_2 by means of their euclidean distance.
 def euclidean_dist(sample_1, sample_2):
 	# Sum squares of differences.

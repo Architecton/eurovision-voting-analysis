@@ -1,3 +1,10 @@
+# First Home Assignment for the Introduction to Data Analysis Class
+# See instructions in folder.
+
+########################
+# Author: Jernej Vivod #
+########################
+
 import csv
 import numpy as np
 import math

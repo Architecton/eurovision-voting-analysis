@@ -2,6 +2,10 @@ import itertools
 from lib_naloga1 import sample_distance
 from lib_naloga1 import nesttools
 
+########################
+# Author: Jernej Vivod #
+########################
+
 # average_linkage: return average distance between samples in group c1 and samples in group c2.
 def average_linkage(c1, c2, data):
 	c1_elements = list(nesttools.un_nest(c1)) # Get elements in groups c1 and c2.

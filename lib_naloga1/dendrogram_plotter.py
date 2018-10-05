@@ -1,6 +1,11 @@
 # plot_dendogram_ascii: plot an ascii graphical representation of a dendogram represented as a list where
 # a node contains the distance between the subtrees and the subtrees and a leaf contains a string representing the base sample.
 # The function is based on a binary tree plotting function but modified to print stem lengths proportional to distances between clusters.
+
+########################
+# Author: Jernej Vivod #
+########################
+
 def plot_dendrogram_ascii(D):
     
     # is_node: check if List represents a node (contains nested lists).

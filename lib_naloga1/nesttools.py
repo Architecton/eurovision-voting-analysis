@@ -1,3 +1,7 @@
+########################
+# Author: Jernej Vivod #
+########################
+
 # un_nest: extract all integers contained in list l that may contain nested lists of integers.
 def un_nest(l):
 	for el in l: 						# Go over elements in list.
