@@ -13,6 +13,7 @@ from lib_naloga1 import group_distance
 from lib_naloga1 import sample_distance
 from lib_naloga1 import dendrogram_plotter
 from lib_naloga1 import inject
+from lib_naloga1 import group_extractor
 
 # Parsing the data file - notes:
 """
@@ -217,7 +218,32 @@ class HierarchicalClustering:
 			self.first_plot = False
 		dendrogram_plotter.plot_dendrogram_ascii(self.clusters) 		# Plot dendrogram.
 
-	#################################
+	# def write_data(self, file_name):
+	#	f = open(file_name, 'w')
+	#	for country in self.data.keys():
+	#		row = " ".join(map(str, self.data[country]))
+	#		f.write(country + " " + row + "\n")
+	#	f.close()
+
+
+	def run_aux(self, num_groups):
+		dist_index = 0
+		# While there is more than one group...
+		while(len(self.clusters) > num_groups):
+			closest_clusters, dist = self.closest_clusters() 			# Find closest clusters and their distance.
+			self.cluster_union(closest_clusters, dist, dist_index)		# Replace clusters with their union.
+			dist_index += 1
+
+	def get_groups(self, num_groups):
+		self.clusters = [[name] for name in self.data.keys()]
+		self.run_aux(num_groups)
+
+	def extract_group_members(self):
+		groups = dict()
+		for index, group in enumerate(self.clusters):
+			groups[index] = group_extractor.extract_names(group)
+		self.groups = groups
+
 
 # If running this file as a script
 if __name__ == "__main__":
