@@ -1,6 +1,9 @@
 from naloga1 import HierarchicalClustering, read_file, get_labels
 import numpy as np
 import matplotlib.pyplot as plt
+
+# Analysis of the results of hierarchical clustering
+
 ########################
 # Author: Jernej Vivod #
 ########################
@@ -15,18 +18,20 @@ hc = HierarchicalClustering(read_file(DATA_FILE)) 	# Create a HierarchicalCluste
 hc.get_groups(11)
 hc.extract_group_members()
 
-# For each group in hc.groups compute how many points it gave to every country.
+## (1) ## For each group in hc.groups compute how many points it gave to every country. ##
+
 points_to_countries = dict()
 
+# Go over group indices.
 for group_index in hc.groups.keys():
-	sum_points = np.zeros(47, dtype = int)
-	for country in hc.groups[group_index]:
+	sum_points = np.zeros(47, dtype = int) 						# Create empty vector for computing the cummulative sums of points for each country.
+	for country in hc.groups[group_index]: 						# Compute commulative sums.
 		sum_points = np.add(sum_points, hc.data[country])
-	sum_points = np.true_divide(sum_points, len(hc.groups[group_index]))
-	points_to_countries[group_index] = sum_points
+	sum_points = np.true_divide(sum_points, sum(sum_points)) 	# Compute proportion of points given to each country.
+	points_to_countries[group_index] = sum_points 				# Add entry to results dict.s
 
 
-# For each group in hc.groups compute how many points it gave to every region. ##
+## (2) ## For each group in hc.groups compute how many points it gave to every region. ##
 
 points_to_regions = dict()
 
@@ -50,7 +55,7 @@ for group_index in hc.groups.keys():
 	points_to_regions[group_index] = points 			# Add computed dict to points_to_regions dict.
 
 
-# For each group in hc.groups compute how many points it gave to every other group in hc.groups (make a nxn matrix and a heatmap).
+## (3) ## For each group in hc.groups compute how many points it gave to every other group in hc.groups (make a nxn matrix and a heatmap). ##
 
 points_to_groups = dict()
 
@@ -70,7 +75,7 @@ for group_index in hc.groups.keys():
 				points_to_other_groups[key] += sum_points[index]
 
 	for key in points_to_other_groups.keys(): 				# Compute ratios.
-		points_to_other_groups[key] / sum(sum_points)
+		points_to_other_groups[key] /= sum(sum_points)
 
 	points_to_groups[group_index] = points_to_other_groups 	# Add computed dict to points_to_regions dict.
 
