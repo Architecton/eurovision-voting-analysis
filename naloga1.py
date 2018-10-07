@@ -218,31 +218,31 @@ class HierarchicalClustering:
 			self.first_plot = False
 		dendrogram_plotter.plot_dendrogram_ascii(self.clusters) 		# Plot dendrogram.
 
-	# def write_data(self, file_name):
-	#	f = open(file_name, 'w')
-	#	for country in self.data.keys():
-	#		row = " ".join(map(str, self.data[country]))
-	#		f.write(country + " " + row + "\n")
-	#	f.close()
 
+	## AUXILIARY METHODS FOR DATA ANALYSIS AND VISUALIZATION ############################################################
 
+	# run_aux: run clustering algorithm until number of groups is as specified. THIS METHOD IS CALLED BY THE get_groups METHOD.
 	def run_aux(self, num_groups):
-		dist_index = 0
-		# While there is more than one group...
+		dist_index = 0 	# Initialize distance index
+		# While there is more than the specified number of groups...
 		while(len(self.clusters) > num_groups):
 			closest_clusters, dist = self.closest_clusters() 			# Find closest clusters and their distance.
 			self.cluster_union(closest_clusters, dist, dist_index)		# Replace clusters with their union.
 			dist_index += 1
 
+	# get_groups: method that initializes the instance to appropriate state and then calls the run_aux method.
 	def get_groups(self, num_groups):
-		self.clusters = [[name] for name in self.data.keys()]
-		self.run_aux(num_groups)
+		self.clusters = [[name] for name in self.data.keys()] 	# Reinitialize clusters.
+		self.run_aux(num_groups) 								# Call run_aux method with specified number of groups as argument.
 
+	# extract_group_members: create a new attribute groups which is a dict that maps group indices to a list of countries in the group.
 	def extract_group_members(self):
 		groups = dict()
 		for index, group in enumerate(self.clusters):
-			groups[index] = group_extractor.extract_names(group)
-		self.groups = groups
+			groups[index] = group_extractor.extract_names(group) 	# Extract names from specified group and map group index to list of country names.
+		self.groups = groups 										# Make groups dict an instance attribute.
+
+	########################################################################################################################
 
 
 # If running this file as a script

@@ -62,10 +62,3 @@ def plot_dendrogram_ascii(D):
 
     # call traverse with initial values for parameters.
     traverse(D, max_height(D), -1, 5)
-
-## Simple test ##
-# D2 = (50, (15, (13, (2, ('Austria') , ('Slovenia')) , ('Israel')), ('Serbia') ), (25, (9, ('France') , ('Germany')), (8, ('Belgium'), ('Sweden') ) ) )
-# plot_dendrogram_ascii(D2)
-
-
-# D3 = [100, [74, ['Cene'], ['Dea']], [125, ['Albert'], [89, ['Branka'], ['Edo']]]]
