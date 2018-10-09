@@ -66,3 +66,16 @@ def single_linkage(c1, c2, data):
 
 	# Return found maximal distance
 	return min_dist
+
+def ward_distance(c1, c2, data):
+	c1_elements = list(nesttools.un_nest(c1))	# Get elements in groups c1 and c2.
+	c2_elements = list(nesttools.un_nest(c2))
+
+	# Get list of of data for each country in each group.
+	c1_data = list(map(lambda x: data[x], c1_elements))
+	c2_data = list(map(lambda x: data[x], c1_elements))
+
+	# Find centroids of c1 and c2
+	# Find cenroid of union(c1 c2)
+	
+	# Compute ward distance 

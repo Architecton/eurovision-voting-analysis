@@ -80,16 +80,46 @@ for group_index in hc.groups.keys():
 	points_to_groups[group_index] = points_to_other_groups 	# Add computed dict to points_to_regions dict.
 
 
+# Compute total proportion of points to each region.
+total = np.zeros(len(hc.data.keys()), dtype = int)
+
+# Get cummulative sum of points for each country.
+for key in hc.data.keys():
+	total = np.add(total, hc.data[key])
+
+# Create a dict for storing the total region ratios and initialize each region to 0.
+total_region_ratios = dict()
+for region in set(labels[1,:]):
+	total_region_ratios[region] = 0
+
+# Compute cummulative sum for each region.
+for index, country in enumerate(labels[0, :]):
+	total_region_ratios[labels[1, index]] += total[index]
+
+# Get ratios.
+for key in total_region_ratios.keys():
+	total_region_ratios[key] /= sum(total)
+
+
+
 # plot_dict: plot a dictionary as a bar plot with key on the x axis and value mapped by the key on the y axis.
-def plot_dict(data_dict, suptitle):
+def plot_dict(data_dict, suptitle, threshold):
 	plt.figure() 												# Create new figure.
 	for i in range(1, len(data_dict.keys()) + 1): 				# Plot each dict entry in own subplot.
 		plt.subplot(3, 4, i)
-		plt.bar(range(len(data_dict[i-1])), list(data_dict[i-1].values())) 	# Plot values.
+		b = plt.bar(range(len(data_dict[i-1])), list(data_dict[i-1].values())) 	# Plot values.
 
 		# If keys are of string type, split into multiply lines by replacing space characters with newline characters
 		if isinstance(list(data_dict[i-1].keys())[0], str):
 			labs = list(map(lambda x: x.replace(' ', '\n'), list(data_dict[i-1].keys())))
+
+			# Color bars which represent values that are a certain threshold above or below the total mean.
+			for index, key in enumerate(data_dict[i-1].keys()):
+				if data_dict[i-1][key] > total_region_ratios[key] + threshold:
+					b[index].set_color('darkorange')
+				elif data_dict[i-1][key] < total_region_ratios[key] - threshold:
+					b[index].set_color('darkgreen')
+
 		else:
 			labs = list(data_dict[i-1].keys())
 
@@ -105,14 +135,23 @@ def plot_dict(data_dict, suptitle):
 	# Adjust margins.
 	plt.subplots_adjust(left=0.05, bottom=None, right=0.98, top=None, wspace=None, hspace=0.3)
 	plt.suptitle(suptitle, fontsize = 25) 						# Add title to main plot.
-	plt.show() 													# Show plot.
+
 
 # Delete "not listed" key from data dict for points to regions by groups data dist (countries with region "not listed" only vote and do not participate).
 for key in points_to_regions.keys():
 	del points_to_regions[key]["not listed"]
 
 # Plot distributions of point ratios among regions for each group.
-plot_dict(points_to_regions, "Proportion of Points Given to Each Region by Each Group")
+plot_dict(points_to_regions, "Proportion of Points Given to Each Region by Each Group", 0.1)
+
+# Plot the total proportion of votes to each region.
+plt.subplot(3, 4, 12)
+del total_region_ratios["not listed"]
+b = plt.bar(range(len(total_region_ratios)), list(total_region_ratios.values()), color = "darkred")
+plt.xticks(range(len(total_region_ratios)), list(map(lambda x: x.replace(' ', '\n'), list(total_region_ratios.keys()))), fontsize = 8)
+plt.title("Proportions of All Votes")
+plt.show()
+
 
 # Plot distribution of point ratios among other groups for each groups.
-plot_dict(points_to_groups, "Proportion of Points Given to Each Group by Each Group")
+plot_dict(points_to_groups, "Proportion of Points Given to Each Group by Each Group", 0.1)
