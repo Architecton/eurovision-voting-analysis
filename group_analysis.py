@@ -106,9 +106,9 @@ for key in total_region_ratios.keys():
 def plot_dict(data_dict, suptitle, threshold):
 	plt.figure() 												# Create new figure.
 	for i in range(1, len(data_dict.keys()) + 1): 				# Plot each dict entry in own subplot.
-		plt.subplot(3, 4, i)
+		plt.subplot(3, 4, i + 1)
 		b = plt.bar(range(len(data_dict[i-1])), list(data_dict[i-1].values())) 	# Plot values.
-
+		plt.ylim(0, 0.45)
 		# If keys are of string type, split into multiply lines by replacing space characters with newline characters
 		if isinstance(list(data_dict[i-1].keys())[0], str):
 			labs = list(map(lambda x: x.replace(' ', '\n'), list(data_dict[i-1].keys())))
@@ -127,7 +127,7 @@ def plot_dict(data_dict, suptitle, threshold):
 		plt.xticks(range(len(data_dict[i-1])), labs, fontsize = 8)
 
 		# Add y labels to leftmost subplots.
-		if i in {1, 5, 9}:
+		if i in {4, 8}:
 			plt.ylabel("proportion of points given")
 
 		plt.title("Group {0}".format(i - 1)) 					# Add title to subplot
@@ -142,16 +142,17 @@ for key in points_to_regions.keys():
 	del points_to_regions[key]["not listed"]
 
 # Plot distributions of point ratios among regions for each group.
-plot_dict(points_to_regions, "Proportion of Points Given to Each Region by Each Group", 0.1)
+plot_dict(points_to_regions, "Proportion of Points Given to Each Region", 0.08)
 
 # Plot the total proportion of votes to each region.
-plt.subplot(3, 4, 12)
+plt.subplot(3, 4, 1)
 del total_region_ratios["not listed"]
 b = plt.bar(range(len(total_region_ratios)), list(total_region_ratios.values()), color = "darkred")
 plt.xticks(range(len(total_region_ratios)), list(map(lambda x: x.replace(' ', '\n'), list(total_region_ratios.keys()))), fontsize = 8)
 plt.title("Proportions of All Votes")
+plt.ylabel("proportion of points given")
 plt.show()
 
 
 # Plot distribution of point ratios among other groups for each groups.
-plot_dict(points_to_groups, "Proportion of Points Given to Each Group by Each Group", 0.1)
+plot_dict(points_to_groups, "Proportion of Points Given to Each Group by Each Group", 0.08)

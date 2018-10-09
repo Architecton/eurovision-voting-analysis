@@ -164,6 +164,8 @@ class HierarchicalClustering:
 			distance_func = group_distance.complete_linkage
 		elif distance_meas == "single":
 			distance_func = group_distance.single_linkage
+		elif distance_meas == "ward":
+			distance_func = group_distance.ward_distance
 		else:
 			raise ValueError("Invalid group distance measuring function")
 		
