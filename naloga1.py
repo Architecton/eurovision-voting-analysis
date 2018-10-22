@@ -50,7 +50,6 @@ def read_file(file_name):
 		NUM_COUNTRIES = 47 																	# There are 47 countries participating/voting.
 		col_names = list(map(lambda x: x.strip(), raw_data[0, :])) 							# Get names of columns.
 		col_names[col_names.index("Serbia & Montenegro")] = "Serbia and Montenegro" 		# Handle country name conflict between name in rows and name in columns.
-
 		# Create rows in processed data matrix.
 		for country in country_names:
 			bins = np.zeros((NUM_COUNTRIES, ), dtype = int) 		# Create bins.
@@ -66,7 +65,6 @@ def read_file(file_name):
 				except ValueError:
 					pass
 			processed_data[country] = bins 							# Add country data to dictionary representing the processed data.
-
 		# Return dictionary representing the processed data
 		return processed_data
 

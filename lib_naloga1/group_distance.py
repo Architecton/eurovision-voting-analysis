@@ -98,14 +98,14 @@ def ward_distance(c1, c2, data):
 	# Compute and return ward distance using formula. 
 	sum_1 = 0
 	for el in np.concatenate([c1_data, c2_data]):
-		sum_1 += sample_distance.euclidean_dist(el, Rc1c2)**2
+		sum_1 += sample_distance.manhattan_dist(el, Rc1c2)**2
 
 	sum_2 = 0
 	for el in c1_data:
-		sum_2 += sample_distance.euclidean_dist(el, Rc1)**2
+		sum_2 += sample_distance.manhattan_dist(el, Rc1)**2
 	
 	sum_3 = 0
 	for el in c2_data:
-		sum_3 += sample_distance.euclidean_dist(el, Rc2)**2
+		sum_3 += sample_distance.manhattan_dist(el, Rc2)**2
 
 	return sum_1 - (sum_2 + sum_3)
